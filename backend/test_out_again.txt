@@ -1,0 +1,18 @@
+Creating test database for alias 'default'...
+.F
+======================================================================
+FAIL: test_login_with_invalid_credentials (api.tests.AuthenticationTests.test_login_with_invalid_credentials)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\aswin\Documents\TagAlong-\backend\api\tests.py", line 38, in test_login_with_invalid_credentials
+    self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+AssertionError: 400 != 401
+
+----------------------------------------------------------------------
+Ran 2 tests in 2.099s
+
+FAILED (failures=1)
+Destroying test database for alias 'default'...
+Found 2 test(s).
+System check identified no issues (0 silenced).
+Response 1: b'{"refresh":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc3MjA4NTA4NywiaWF0IjoxNzcxOTk4Njg3LCJqdGkiOiI3YTA1MTIwNWQ5ODQ0OWU1YTNkMzM3ZGJmOTVkMDdmMSIsInVzZXJfaWQiOiIxIn0.Y2cr0RsVLeWbzry8gu5NtZ7mE2JwzBYYv1mH36dI33o","access":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcxOTk4OTg3LCJpYXQiOjE3NzE5OTg2ODcsImp0aSI6IjU1NThmM2UwNGIxYzQzOGJhZjcwNGRmYTBlMjViOGM1IiwidXNlcl9pZCI6IjEifQ.kt6rWIh1uPNsJ_n7l3wtcfChrLyjG1QdHGep4gRlYPc"}'
