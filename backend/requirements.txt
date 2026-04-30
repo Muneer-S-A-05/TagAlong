@@ -7,3 +7,4 @@ Pillow>=10.0
 whitenoise>=6.5
 django-cloudinary-storage>=0.3.0
 cloudinary>=1.36
+dj-database-url
