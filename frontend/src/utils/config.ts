@@ -1,6 +1,12 @@
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
+// ============================================================
+// VERCEL PRODUCTION URL (uncomment the line below for release builds)
+// export const API_URL = 'https://your-app-name.vercel.app/api';
+// ============================================================
+
+// === LOCAL DEVELOPMENT URL (comment out the block below for production) ===
 const debuggerHost = Constants.expoConfig?.hostUri;
 let HOST = '10.0.2.2'; // Default Android Emulator bridging mapping
 
