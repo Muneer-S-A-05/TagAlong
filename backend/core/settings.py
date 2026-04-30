@@ -31,10 +31,11 @@ DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 VERCEL_URL = os.environ.get('VERCEL_URL')
 
 ALLOWED_HOSTS = [
+    'tag-along-1q1v.vercel.app',  # Your exact Vercel domain
+    '.vercel.app',               # Wildcard for all Vercel subdomains
     'localhost',
     '127.0.0.1',
-    '10.0.2.2',
-    '.vercel.app',  # Allows all Vercel subdomains
+    '10.0.2.2'
 ]
 
 if VERCEL_URL:
