@@ -1,0 +1,6 @@
+# --- Deployment Instructions & Documentation ---
+deploy_instructions.md
+
+# --- Security & Certificates ---
+*.pem
+isrgrootx1.pem
