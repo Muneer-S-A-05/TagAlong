@@ -127,7 +127,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-AUTH_USER_MODEL = 'api.User'
+#AUTH_USER_MODEL = 'api.User'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -145,3 +145,20 @@ SIMPLE_JWT = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('DB_NAME', 'tagalong_db'),
+        'USER': os.getenv('DB_USER', 'root'),  # Falls back to root if env variable is missing
+        'PASSWORD': os.getenv('DB_PASSWORD', ''), 
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'), # Falls back to localhost if env variable is missing
+        'PORT': os.getenv('DB_PORT', '3306'),
+        'OPTIONS': {
+            'ssl': {
+                # Points to the cert file inside your backend/certs folder dynamically
+                'ca': os.path.join(BASE_DIR, 'certs', 'isrgrootx1.pem')
+            }
+        }
+    }
+}
