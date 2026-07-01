@@ -1,0 +1,23 @@
+# Node / Expo (frontend)
+frontend/node_modules/
+frontend/.expo/
+frontend/dist/
+frontend/web-build/
+frontend/expo-env.d.ts
+
+# Python / Django (backend)
+backend/venv/
+backend/.venv/
+backend/__pycache__/
+backend/*.pyc
+backend/db.sqlite3
+backend/media/
+backend/staticfiles/
+
+# OS / IDE files
+.DS_Store
+.vscode/
+.idea/
+*.log
+isrgrootx1.pem
+TagAlongfsdfb
