@@ -5,20 +5,35 @@ from django.core.validators import RegexValidator
 class RegisterSerializer(serializers.ModelSerializer):
     # 1. Tell Django to accept 'full_name' from the frontend, but don't look for it in the database
     full_name = serializers.CharField(write_only=True, required=False, allow_blank=True)
-
+    username = serializers.CharField(required=False, allow_blank=True)
+    
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password', 'full_name')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        # 2. Pop the 'full_name' out of the data BEFORE Django tries to save it
+        email = validated_data.get('email', '')
+        username = validated_data.get('username', '')
+
+        # 3. The Magic: If no username was provided, build it from the email!
+        if not username and email:
+            base_username = email.split('@')[0]
+            username = base_username
+            
+            # Smart check: If 'john' is taken, try 'john1', 'john2', etc.
+            counter = 1
+            while User.objects.filter(username=username).exists():
+                username = f"{base_username}{counter}"
+                counter += 1
+                
+        # 4. Pop the full_name out
         full_name = validated_data.pop('full_name', '')
         
-        # 3. Create the user safely, stashing the full_name inside Django's built-in first_name field
+        # 5. Create the user with the auto-generated username
         user = User.objects.create_user(
-            username=validated_data.get('username'),
-            email=validated_data.get('email', ''),
+            username=username,
+            email=email,
             password=validated_data.get('password'),
             first_name=full_name 
         )
