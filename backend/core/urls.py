@@ -3,7 +3,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+def api_root(request):
+    return JsonResponse({"message": "TagAlong API is live on Vercel!", "status": "active"})
+
 urlpatterns = [
+    path('', api_root, name='api_root'),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
 ]
