@@ -48,7 +48,7 @@ class RequestManagerListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         # Only show open requests
-        queryset = RequestManager.objects.filter(status='Pending').exclude(requester=self.request.user)
+        queryset = RequestManager.objects.filter(status='Pending').exclude(creator=self.request.user)
         lat = self.request.query_params.get('lat')
         lng = self.request.query_params.get('lng')
         radius = float(self.request.query_params.get('radius', 5.0)) # default 5km
@@ -62,13 +62,13 @@ class RequestManagerListCreateView(generics.ListCreateAPIView):
                     distance = haversine(lat, lng, float(req.latitude), float(req.longitude))
                     if distance <= radius:
                         matched_ids.append(req.id)
-                return queryset.filter(id__in=matched_ids).order_by('time')
+                return queryset.filter(id__in=matched_ids).order_by('created_at')
             except ValueError:
                 pass
-        return queryset.order_by('time')
+        return queryset.order_by('created_at')
 
     def perform_create(self, serializer):
-        serializer.save(requester=self.request.user)
+        serializer.save(creator=self.request.user)
 
 
 class ListingListCreateView(generics.ListCreateAPIView):
@@ -146,7 +146,7 @@ class RequestManagerAcceptView(APIView):
     def post(self, request, pk):
         try:
             req = RequestManager.objects.get(pk=pk, status='Pending')
-            if req.requester == request.user:
+            if req.creator == request.user:
                 return Response({'error': 'Cannot accept your own request'}, status=400)
             
             req.applicants.add(request.user)
@@ -170,7 +170,7 @@ class RequestManagerSelectHelperView(APIView):
 
     def post(self, request, pk):
         try:
-            req = RequestManager.objects.get(pk=pk, status='Pending', requester=request.user)
+            req = RequestManager.objects.get(pk=pk, status='Pending', creator=request.user)
             helper_id = request.data.get('helper_id')
             if not helper_id:
                 return Response({'error': 'No helper selected'}, status=400)
@@ -194,7 +194,7 @@ class RequestManagerCloseView(APIView):
 
     def delete(self, request, pk):
         try:
-            req = RequestManager.objects.get(pk=pk, requester=request.user)
+            req = RequestManager.objects.get(pk=pk, creator=request.user)
             req.delete()
             return Response({'success': 'Request closed successfully'})
         except RequestManager.DoesNotExist:
@@ -207,7 +207,7 @@ class RequestManagerUpdateView(generics.UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        if instance.requester != request.user:
+        if instance.creator != request.user:
             return Response({'error': 'You can only edit your own requests'}, status=403)
         return super().update(request, *args, **kwargs)
 
@@ -234,7 +234,7 @@ class AdminRequestListView(generics.ListAPIView):
 
     def get_queryset(self):
         # Returns ALL Active and Matched requests across the entire campus
-        return RequestManager.objects.filter(status__in=['Pending', 'Matched']).order_by('-time')
+        return RequestManager.objects.filter(status__in=['Pending', 'Matched']).order_by('-created_at')
 
 class AdminRequestDeleteView(APIView):
     permission_classes = [permissions.IsAdminUser]

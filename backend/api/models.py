@@ -27,6 +27,8 @@ class Listing(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True)
 
+    seller = models.ForeignKey(User, on_delete=models.CASCADE)
+
 class LocationInsight(models.Model):
     # Location coordinates strictly
     latitude = models.FloatField()
