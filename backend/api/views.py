@@ -253,7 +253,7 @@ class UserProfileView(APIView):
     def get(self, request):
         user = request.user
         # Get active requests mapped to this user
-        requests = RequestManager.objects.filter(requester=user, status='Pending').order_by('-time')
+        requests = RequestManager.objects.filter(creator=user).order_by('-created_at')
         # Get completed matching paths exclusively mapped onto the Creator independently
         matched_requests = RequestManager.objects.filter(requester=user, status='Matched').order_by('-time')
 
