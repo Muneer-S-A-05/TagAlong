@@ -101,6 +101,7 @@ class RequestManagerSerializer(serializers.ModelSerializer):
         return result
 
 class ListingSerializer(serializers.ModelSerializer):
+    item_name = serializers.CharField(source='title')
     seller_email = serializers.EmailField(source='seller.email', read_only=True)
     seller_phone = serializers.CharField(source='seller.phone_number', read_only=True)
     

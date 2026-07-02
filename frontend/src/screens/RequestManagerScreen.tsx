@@ -34,7 +34,13 @@ export default function RequestManagerScreen() {
                 return;
             }
             try {
-                let location = await Location.getCurrentPositionAsync({});
+                let location = await Location.getLastKnownPositionAsync({});
+
+                // If no cache exists, get a quick lock (accuracy: 1 is low accuracy/fastest)
+                if (!location) {
+                    location = await Location.getCurrentPositionAsync({ accuracy: 1 });
+                }
+                
                 setLat(location.coords.latitude.toFixed(6));
                 setLng(location.coords.longitude.toFixed(6));
                 setLocationMsg(`📍 Live Location Active (${location.coords.latitude.toFixed(2)}, ${location.coords.longitude.toFixed(2)})`);

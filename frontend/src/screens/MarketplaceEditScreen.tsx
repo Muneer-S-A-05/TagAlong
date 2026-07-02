@@ -12,7 +12,7 @@ export default function MarketplaceEditScreen() {
     const navigation = useNavigation<any>();
     const { item } = route.params;
 
-    const [name, setName] = useState(item.item_name || '');
+    const [name, setName] = useState(item.title || '');
     const [price, setPrice] = useState(item.asking_price?.toString() || '');
     const [desc, setDesc] = useState(item.description || '');
     const [imageUri, setImageUri] = useState<string | null>(item.image || null);
@@ -45,7 +45,7 @@ export default function MarketplaceEditScreen() {
         try {
             const token = await AsyncStorage.getItem('access_token');
             const formData = new FormData();
-            formData.append('item_name', name);
+            formData.append('title', name);
             formData.append('asking_price', price);
             formData.append('description', desc);
 

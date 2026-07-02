@@ -59,7 +59,7 @@ export default function MarketplaceScreen() {
         try {
             const token = await AsyncStorage.getItem('access_token');
             const formData = new FormData();
-            formData.append('item_name', name);
+            formData.append('title', name);
             formData.append('asking_price', price);
             formData.append('description', desc);
 
@@ -133,7 +133,7 @@ export default function MarketplaceScreen() {
                                     <Text style={{ color: '#888', fontSize: 12 }}>No Image</Text>
                                 </View>
                             )}
-                            <Text style={{ color: COLORS.royalBlue, fontWeight: 'bold', fontSize: 16 }} numberOfLines={1}>{r.item_name}</Text>
+                            <Text style={{ color: COLORS.royalBlue, fontWeight: 'bold', fontSize: 16 }} numberOfLines={1}>{r.title}</Text>
                             <Text style={{ color: COLORS.indigo, fontWeight: 'bold', marginTop: 4 }}>₹{r.asking_price}</Text>
                             <Text style={{ color: COLORS.lightSubtext, fontSize: 12, marginTop: 4 }} numberOfLines={2}>{r.description}</Text>
                         </TouchableOpacity>
