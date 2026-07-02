@@ -59,23 +59,44 @@ export default function MarketplaceScreen() {
         try {
             const token = await AsyncStorage.getItem('access_token');
             const formData = new FormData();
-            formData.append('title', name);
+            formData.append('item_name', name);
             formData.append('asking_price', price);
             formData.append('description', desc);
 
             if (imageUri) {
                 let filename = imageUri.split('/').pop() || 'upload.jpg';
                 let match = /\.(\w+)$/.exec(filename);
-                let type = match ? `image/${match[1]}` : `image`;
-                formData.append('image', { uri: imageUri, name: filename, type } as any);
+                let type = match ? `image/${match[1]}` : `image/jpeg`;
+                
+                // Platform specific URI formatting for React Native
+                const finalUri = Platform.OS === 'ios' ? imageUri.replace('file://', '') : imageUri;
+                
+                formData.append('image', { 
+                    uri: finalUri, 
+                    name: filename, 
+                    type: type 
+                } as any);
             }
 
-            await axios.post(`${API_URL}/marketplace/`, formData, {
+            const response = await fetch(`${API_URL}/marketplace/`, {
+                method: 'POST',
                 headers: { 
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
-                }
+                    'Authorization': `Bearer ${token}`
+                    // Notice we explicitly do NOT set Content-Type here. 
+                    // fetch() will automatically generate the correct boundary string.
+                },
+                body: formData
             });
+
+            // Parse the response
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                console.log("Backend rejected:", responseData);
+                Alert.alert('Error', 'Failed to upload. Check terminal.');
+                return;
+            }
+
             Alert.alert('Success', 'Listing added!');
             setName('');
             setPrice('');
@@ -83,8 +104,8 @@ export default function MarketplaceScreen() {
             setImageUri(null);
             fetchItems();
         } catch (error: any) {
-            console.log('Error creating marketplace item', error.response?.data || error);
-            Alert.alert('Error', 'Could not create listing');
+            console.log('Error creating marketplace item', error);
+            Alert.alert('Error', 'Network error or crash during upload');
         }
     };
 
