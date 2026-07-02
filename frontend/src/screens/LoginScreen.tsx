@@ -59,13 +59,6 @@ export default function LoginScreen({ navigation }: any) {
                         <Text style={globalStyles.buttonText}>Sign In</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity 
-                        style={[globalStyles.button, { backgroundColor: 'transparent', borderWidth: 1, borderColor: COLORS.urgentOrange, marginTop: 12 }]} 
-                        onPress={() => { setEmail('admin@cet.ac.in'); setPassword('admin123'); setTimeout(handleLogin, 100); }}
-                    >
-                        <Text style={[globalStyles.buttonText, { color: COLORS.urgentOrange }]}>Login as Admin (Staff)</Text>
-                    </TouchableOpacity>
-
                     <TouchableOpacity onPress={() => navigation.navigate('Register')} style={{ alignSelf: 'center', marginTop: 16 }}>
                         <Text style={{ color: COLORS.royalBlue, fontSize: 13, fontWeight: 'bold' }}>Don't have an account? Register</Text>
                     </TouchableOpacity>

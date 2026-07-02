@@ -102,7 +102,7 @@ class ListingDeleteView(APIView):
             return Response({'error': 'Listing not found'}, status=404)
 
 class ListingUpdateView(generics.UpdateAPIView):
-    queryset = Listing.objects.all()
+    queryset = Listing.objects.select_related('seller').all()
     serializer_class = ListingSerializer
     permission_classes = [permissions.IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
