@@ -89,7 +89,7 @@ export default function MarketplaceDetailScreen() {
 
                 <View style={[styles.detailCard, globalStyles.cardShadow]}>
                     <Text style={styles.titleText}>{itemData.title}</Text>
-                    <Text style={styles.priceText}>₹{itemData.asking_price}</Text>
+                    <Text style={styles.priceText}>₹{itemData.price}</Text>
 
                     <Text style={styles.label}>Description</Text>
                     <Text style={styles.descriptionText}>{itemData.description}</Text>

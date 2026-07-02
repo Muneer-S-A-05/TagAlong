@@ -129,7 +129,7 @@ export default function DashboardOverviewScreen() {
                                     </View>
                                 )}
                                 <Text style={styles.marketTitle} numberOfLines={1}>{m.item_name}</Text>
-                                <Text style={styles.marketPrice}>₹{m.asking_price}</Text>
+                                <Text style={styles.marketPrice}>₹{m.price}</Text>
                             </TouchableOpacity>
                         )}
                     />

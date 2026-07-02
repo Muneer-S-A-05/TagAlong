@@ -151,7 +151,7 @@ export default function ProfileScreen() {
                                     </View>
                                 )}
                                 <Text style={styles.marketTitle} numberOfLines={1}>{m.item_name}</Text>
-                                <Text style={styles.marketPrice}>₹{m.asking_price}</Text>
+                                <Text style={styles.marketPrice}>₹{m.price}</Text>
                                 <Text style={{ color: COLORS.lightSubtext, fontSize: 10, marginTop: 4 }} numberOfLines={1}>{profileData.user.email}</Text>
                             </TouchableOpacity>
                         )}

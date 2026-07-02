@@ -13,7 +13,7 @@ export default function MarketplaceEditScreen() {
     const { item } = route.params;
 
     const [name, setName] = useState(item.title || '');
-    const [price, setPrice] = useState(item.asking_price?.toString() || '');
+    const [price, setPrice] = useState(item.price?.toString() || '');
     const [desc, setDesc] = useState(item.description || '');
     const [imageUri, setImageUri] = useState<string | null>(item.image || null);
     const [isImageChanged, setIsImageChanged] = useState(false);
@@ -46,7 +46,7 @@ export default function MarketplaceEditScreen() {
             const token = await AsyncStorage.getItem('access_token');
             const formData = new FormData();
             formData.append('title', name);
-            formData.append('asking_price', price);
+            formData.append('price', price);
             formData.append('description', desc);
 
             if (isImageChanged && imageUri) {

@@ -167,7 +167,7 @@ export default function MarketplaceScreen() {
                                 </View>
                             )}
                             <Text style={{ color: COLORS.royalBlue, fontWeight: 'bold', fontSize: 16 }} numberOfLines={1}>{r.title}</Text>
-                            <Text style={{ color: COLORS.indigo, fontWeight: 'bold', marginTop: 4 }}>₹{r.asking_price}</Text>
+                            <Text style={{ color: COLORS.indigo, fontWeight: 'bold', marginTop: 4 }}>₹{r.price}</Text>
                             <Text style={{ color: COLORS.lightSubtext, fontSize: 12, marginTop: 4 }} numberOfLines={2}>{r.description}</Text>
                         </TouchableOpacity>
                     )}
