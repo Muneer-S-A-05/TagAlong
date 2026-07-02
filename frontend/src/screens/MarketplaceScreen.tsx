@@ -67,17 +67,23 @@ export default function MarketplaceScreen() {
             formData.append('description', desc);
 
             if (imageUri) {
+                // Extract filename from URI
                 let filename = imageUri.split('/').pop() || 'upload.jpg';
+                
+                // WEB FIX: If the web blob URL doesn't have an extension, give it one
+                if (!filename.includes('.')) {
+                    filename = `${filename}.jpg`;
+                }
+
                 let match = /\.(\w+)$/.exec(filename);
                 let type = match ? `image/${match[1]}` : `image/jpeg`;
                 
                 if (Platform.OS === 'web') {
-                    // WEB FIX: Convert the local web URI to a binary Blob
                     const response = await fetch(imageUri);
                     const blob = await response.blob();
+                    // Append using the corrected filename
                     formData.append('image', blob, filename);
                 } else {
-                    // NATIVE MOBILE: Use the standard React Native object
                     const finalUri = Platform.OS === 'ios' ? imageUri.replace('file://', '') : imageUri;
                     formData.append('image', { 
                         uri: finalUri, 
