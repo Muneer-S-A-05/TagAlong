@@ -253,9 +253,9 @@ class UserProfileView(APIView):
     def get(self, request):
         user = request.user
         # Get active requests mapped to this user
-        requests = RequestManager.objects.filter(creator=user).order_by('-created_at')
+        requests = RequestManager.objects.filter(creator=user,status='Pending').order_by('-created_at')
         # Get completed matching paths exclusively mapped onto the Creator independently
-        matched_requests = RequestManager.objects.filter(requester=user, status='Matched').order_by('-time')
+        matched_requests = RequestManager.objects.filter(creator=user, status='Matched').order_by('-created_at')
 
         # Get all marketplace listings mapped to this user
         listings = Listing.objects.filter(seller=user).order_by('-id')
@@ -264,7 +264,7 @@ class UserProfileView(APIView):
         accepted_requests = RequestManager.objects.filter(
             Q(matched_user=user, status='Matched') | 
             Q(applicants=user, status='Pending')
-        ).distinct().order_by('-time')
+        ).distinct().order_by('-created_at')
 
         # Returning custom aggregated response without strictly defining a new Serializer class
         return Response({
