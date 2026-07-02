@@ -8,6 +8,7 @@ class User(AbstractUser):
 
 class RequestManager(models.Model):
     title = models.CharField(max_length=255)
+    destination = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField()
     
     latitude = models.FloatField(null=True, blank=True)
@@ -15,7 +16,8 @@ class RequestManager(models.Model):
     
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='managed_requests')
     created_at = models.DateTimeField(auto_now_add=True)
-
+    deadline = models.DateTimeField(null=True, blank=True)
+    
     status = models.CharField(max_length=20, default='Pending')
     matched_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='matched_requests')
     applicants = models.ManyToManyField(User, related_name='applied_requests', blank=True)

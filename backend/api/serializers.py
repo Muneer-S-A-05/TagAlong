@@ -72,6 +72,7 @@ class BasicUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'full_name', 'phone_number', 'email')
 
 class RequestManagerSerializer(serializers.ModelSerializer):
+    item_or_service = serializers.CharField(source='title')
     # Fixed the 'requester' vs 'creator' mismatch
     requester_email = serializers.EmailField(source='creator.email', read_only=True)
     requester_phone = serializers.CharField(source='creator.phone_number', read_only=True)
