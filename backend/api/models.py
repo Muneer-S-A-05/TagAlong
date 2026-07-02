@@ -13,6 +13,8 @@ class RequestManager(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     status = models.CharField(max_length=20, default='Pending')
+    matched_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='matched_requests')
+
 
     def __str__(self):
         return self.title
