@@ -59,8 +59,10 @@ export default function MarketplaceScreen() {
         try {
             const token = await AsyncStorage.getItem('access_token');
             const formData = new FormData();
-            formData.append('item_name', name);
-            formData.append('asking_price', price);
+            
+            // EXACT matches to the Django model columns
+            formData.append('title', name); 
+            formData.append('price', price); 
             formData.append('description', desc);
 
             if (imageUri) {
@@ -68,7 +70,7 @@ export default function MarketplaceScreen() {
                 let match = /\.(\w+)$/.exec(filename);
                 let type = match ? `image/${match[1]}` : `image/jpeg`;
                 
-                // Platform specific URI formatting for React Native
+                // Formatted specifically for React Native mobile FormData
                 const finalUri = Platform.OS === 'ios' ? imageUri.replace('file://', '') : imageUri;
                 
                 formData.append('image', { 
@@ -78,22 +80,19 @@ export default function MarketplaceScreen() {
                 } as any);
             }
 
+            // Using native fetch() bypasses the boundary stripping issue in Axios
             const response = await fetch(`${API_URL}/marketplace/`, {
                 method: 'POST',
                 headers: { 
                     'Authorization': `Bearer ${token}`
-                    // Notice we explicitly do NOT set Content-Type here. 
-                    // fetch() will automatically generate the correct boundary string.
                 },
                 body: formData
             });
 
-            // Parse the response
-            const responseData = await response.json();
-
             if (!response.ok) {
-                console.log("Backend rejected:", responseData);
-                Alert.alert('Error', 'Failed to upload. Check terminal.');
+                const errorData = await response.json();
+                console.log("Backend rejected:", errorData);
+                Alert.alert('Error', 'Check console for details');
                 return;
             }
 
@@ -104,8 +103,8 @@ export default function MarketplaceScreen() {
             setImageUri(null);
             fetchItems();
         } catch (error: any) {
-            console.log('Error creating marketplace item', error);
-            Alert.alert('Error', 'Network error or crash during upload');
+            console.log('Upload error', error);
+            Alert.alert('Error', 'Could not create listing');
         }
     };
 

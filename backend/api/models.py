@@ -27,12 +27,12 @@ class RequestManager(models.Model):
 
 class Listing(models.Model):
     title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True) # <-- ADD THIS LINE
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     
-    # Added the missing image field so your views stop crashing
     image = models.ImageField(upload_to='listings/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
