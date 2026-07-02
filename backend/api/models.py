@@ -12,6 +12,8 @@ class RequestManager(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='managed_requests')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    status = models.CharField(max_length=20, default='Pending')
+
     def __str__(self):
         return self.title
 
