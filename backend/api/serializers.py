@@ -1,41 +1,41 @@
-from rest_framework import serializers
-from .models import User, RequestManager, Listing, LocationInsight
+from rest_framework import serializers, exceptions
+from django.contrib.auth import authenticate, get_user_model
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.core.validators import RegexValidator
+from .models import RequestManager, Listing, LocationInsight, ApplicantLocation
+
+User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
-    # 1. Tell Django to accept 'full_name' from the frontend, but don't look for it in the database
     full_name = serializers.CharField(write_only=True, required=False, allow_blank=True)
     username = serializers.CharField(required=False, allow_blank=True)
     
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password', 'full_name')
+        fields = ('id', 'username', 'email', 'password', 'full_name', 'phone_number')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         email = validated_data.get('email', '')
         username = validated_data.get('username', '')
 
-        # 3. The Magic: If no username was provided, build it from the email!
         if not username and email:
             base_username = email.split('@')[0]
             username = base_username
-            
-            # Smart check: If 'john' is taken, try 'john1', 'john2', etc.
             counter = 1
             while User.objects.filter(username=username).exists():
                 username = f"{base_username}{counter}"
                 counter += 1
                 
-        # 4. Pop the full_name out
         full_name = validated_data.pop('full_name', '')
+        phone_number = validated_data.get('phone_number', '')
         
-        # 5. Create the user with the auto-generated username
         user = User.objects.create_user(
             username=username,
             email=email,
             password=validated_data.get('password'),
-            first_name=full_name 
+            full_name=full_name,
+            phone_number=phone_number
         )
         return user
 
@@ -43,11 +43,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         if value and (not value.isdigit() or len(value) != 10):
             raise serializers.ValidationError("Phone number must be exactly 10 digits.")
         return value
-
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.contrib.auth import authenticate
-
-from rest_framework import serializers, exceptions
 
 class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
     def __init__(self, *args, **kwargs):
@@ -68,9 +63,7 @@ class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
             raise exceptions.AuthenticationFailed('Must include "email" and "password".', code='authorization')
             
         attrs['username'] = email
-
         data = super().validate(attrs)
-        
         return data
 
 class BasicUserSerializer(serializers.ModelSerializer):
@@ -79,9 +72,10 @@ class BasicUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'full_name', 'phone_number', 'email')
 
 class RequestManagerSerializer(serializers.ModelSerializer):
-    requester_email = serializers.EmailField(source='requester.email', read_only=True)
-    requester_phone = serializers.CharField(source='requester.phone_number', read_only=True)
-    requester_full_name = serializers.CharField(source='requester.full_name', read_only=True)
+    # Fixed the 'requester' vs 'creator' mismatch
+    requester_email = serializers.EmailField(source='creator.email', read_only=True)
+    requester_phone = serializers.CharField(source='creator.phone_number', read_only=True)
+    requester_full_name = serializers.CharField(source='creator.full_name', read_only=True)
     matched_user_email = serializers.EmailField(source='matched_user.email', read_only=True)
     matched_user_phone = serializers.CharField(source='matched_user.phone_number', read_only=True)
     applicants_list = serializers.SerializerMethodField()
@@ -89,10 +83,9 @@ class RequestManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = RequestManager
         fields = '__all__'
-        read_only_fields = ('requester', 'matched_user')
+        read_only_fields = ('creator', 'matched_user')
 
     def get_applicants_list(self, obj):
-        from .models import ApplicantLocation
         applicants = obj.applicants.all()
         result = []
         for user in applicants:
