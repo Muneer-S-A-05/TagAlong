@@ -43,7 +43,8 @@ export default function MarketplaceScreen() {
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
-            quality: 0.8,
+            // MASSIVE FIX: Drop quality to 0.3 or 0.2 to crush file size under 2MB
+            quality: 0.3, 
         });
 
         if (!pickerResult.canceled && pickerResult.assets && pickerResult.assets.length > 0) {
