@@ -70,14 +70,20 @@ export default function MarketplaceScreen() {
                 let match = /\.(\w+)$/.exec(filename);
                 let type = match ? `image/${match[1]}` : `image/jpeg`;
                 
-                // Formatted specifically for React Native mobile FormData
-                const finalUri = Platform.OS === 'ios' ? imageUri.replace('file://', '') : imageUri;
-                
-                formData.append('image', { 
-                    uri: finalUri, 
-                    name: filename, 
-                    type: type 
-                } as any);
+                if (Platform.OS === 'web') {
+                    // WEB FIX: Convert the local web URI to a binary Blob
+                    const response = await fetch(imageUri);
+                    const blob = await response.blob();
+                    formData.append('image', blob, filename);
+                } else {
+                    // NATIVE MOBILE: Use the standard React Native object
+                    const finalUri = Platform.OS === 'ios' ? imageUri.replace('file://', '') : imageUri;
+                    formData.append('image', { 
+                        uri: finalUri, 
+                        name: filename, 
+                        type: type 
+                    } as any);
+                }
             }
 
             // Using native fetch() bypasses the boundary stripping issue in Axios
