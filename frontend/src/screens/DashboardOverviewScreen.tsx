@@ -94,7 +94,7 @@ export default function DashboardOverviewScreen() {
                                     <Text style={styles.avatarText}>{r.requester_email ? r.requester_email.charAt(0).toUpperCase() : 'U'}</Text>
                                 </View>
                                 <View style={styles.listContent}>
-                                    <Text style={styles.listTitle}>{r.item_or_service}</Text>
+                                    <Text style={styles.listTitle}>{r.title}</Text>
                                     <Text style={styles.listSubtext}>
                                         {r.destination} • {r.deadline ? new Date(r.deadline).toLocaleString([], { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }) : 'No Deadline'}
                                     </Text>

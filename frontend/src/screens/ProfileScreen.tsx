@@ -85,7 +85,7 @@ export default function ProfileScreen() {
                     profileData.requests.map((r: any) => (
                         <TouchableOpacity key={r.id} style={[styles.listItem, globalStyles.cardShadow]} onPress={() => navigation.navigate('RequestDetail', { request: r })}>
                             <View style={styles.listContent}>
-                                <Text style={styles.listTitle}>{r.item_or_service}</Text>
+                                <Text style={styles.listTitle}>{r.title}</Text>
                                 <Text style={styles.listSubtext}>{r.destination}</Text>
                             </View>
                             <View style={[styles.statusPill, { backgroundColor: r.status === 'Pending' ? COLORS.indigo : COLORS.success }]}>
@@ -103,7 +103,7 @@ export default function ProfileScreen() {
                     profileData.matched_requests.map((r: any) => (
                         <TouchableOpacity key={r.id} style={[styles.listItem, globalStyles.cardShadow]} onPress={() => navigation.navigate('RequestDetail', { request: r })}>
                             <View style={styles.listContent}>
-                                <Text style={styles.listTitle}>{r.item_or_service}</Text>
+                                <Text style={styles.listTitle}>{r.title}</Text>
                                 <Text style={styles.listSubtext}>{r.destination}</Text>
                             </View>
                             <View style={[styles.statusPill, { backgroundColor: COLORS.success }]}>
@@ -121,7 +121,7 @@ export default function ProfileScreen() {
                     profileData.accepted_requests.map((r: any) => (
                         <TouchableOpacity key={r.id} style={[styles.listItem, globalStyles.cardShadow]} onPress={() => navigation.navigate('RequestDetail', { request: r })}>
                             <View style={styles.listContent}>
-                                <Text style={styles.listTitle}>{r.item_or_service}</Text>
+                                <Text style={styles.listTitle}>{r.title}</Text>
                                 <Text style={styles.listSubtext}>{r.destination}</Text>
                             </View>
                             <View style={[styles.statusPill, { backgroundColor: r.status === 'Matched' ? COLORS.success : COLORS.urgentOrange }]}>

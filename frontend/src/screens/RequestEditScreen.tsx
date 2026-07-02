@@ -13,7 +13,7 @@ export default function RequestEditScreen() {
     const request = route.params?.request;
 
     const [dest, setDest] = useState(request?.destination || '');
-    const [item, setItem] = useState(request?.item_or_service || '');
+    const [item, setItem] = useState(request?.title || '');
     const [desc, setDesc] = useState(request?.description || '');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -34,7 +34,7 @@ export default function RequestEditScreen() {
             const token = await AsyncStorage.getItem('access_token');
             await axios.patch(`${API_URL}/requests/${request.id}/update/`, {
                 destination: dest,
-                item_or_service: item,
+                title: item,
                 description: desc,
                 deadline: useDeadline ? deadline.toISOString() : null
             }, {

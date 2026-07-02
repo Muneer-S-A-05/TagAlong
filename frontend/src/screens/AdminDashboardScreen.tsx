@@ -84,7 +84,7 @@ export default function AdminDashboardScreen() {
             <View style={styles.divider} />
 
             <View style={styles.requestBody}>
-                <Text style={styles.itemTitle}>{item.item_or_service}</Text>
+                <Text style={styles.itemTitle}>{item.title}</Text>
                 <View style={styles.infoRow}>
                     <MaterialCommunityIcons name="map-marker-outline" size={16} color={COLORS.lightSubtext} />
                     <Text style={styles.infoText}>{item.destination}</Text>

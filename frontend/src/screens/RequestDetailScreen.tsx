@@ -42,7 +42,7 @@ export default function RequestDetailScreen() {
         );
     }
 
-    const isCreator = currentUserId === requestData.requester;
+    const isCreator = currentUserId === requestData.creator;
     const hasApplied = requestData.applicants_list?.some((a: any) => a.id === currentUserId);
 
     const handleContact = (phone: string, title: string) => {
@@ -147,7 +147,7 @@ export default function RequestDetailScreen() {
                     <Text style={styles.value}>{requestData.requester_email}</Text>
 
                     <Text style={styles.label}>Item / Service</Text>
-                    <Text style={styles.value}>{requestData.item_or_service}</Text>
+                    <Text style={styles.value}>{requestData.title}</Text>
 
                     <Text style={styles.label}>Destination</Text>
                     <Text style={styles.value}>{requestData.destination}</Text>
@@ -277,7 +277,7 @@ export default function RequestDetailScreen() {
                                 <Text style={styles.modalTitle}>Applicant Details</Text>
                                 <View style={{ width: '100%', alignItems: 'center', marginBottom: 24 }}>
                                     <Text style={{ fontSize: 18, color: COLORS.royalBlue, fontWeight: 'bold', marginBottom: 8 }}>{selectedApplicant.email}</Text>
-                                    <Text style={{ fontSize: 16, color: COLORS.lightText }}>{selectedApplicant.first_name || 'User'} {selectedApplicant.last_name}</Text>
+                                    <Text style={{ fontSize: 16, color: COLORS.lightText }}>{selectedApplicant.full_name || 'User'}</Text>
                                     {(selectedApplicant.latitude && selectedApplicant.longitude) ? (
                                         <Text style={{ fontSize: 14, color: COLORS.lightSubtext, marginTop: 8 }}>
                                             📍 Location: {selectedApplicant.latitude}, {selectedApplicant.longitude}
