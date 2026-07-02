@@ -123,16 +123,6 @@ export default function RequestManagerScreen() {
                         />
                     </View>
 
-                    {/* Deadline Section */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, paddingHorizontal: 4 }}>
-                        <Text style={{ color: COLORS.lightText, fontWeight: 'bold' }}>Set Deadline?</Text>
-                        <Switch 
-                            value={useDeadline} 
-                            onValueChange={setUseDeadline} 
-                            trackColor={{ false: '#767577', true: COLORS.indigo }}
-                        />
-                    </View>
-
                     {/* ANDROID UI: Two clean buttons to trigger the Modal */}
                     {useDeadline && Platform.OS === 'android' && (
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
