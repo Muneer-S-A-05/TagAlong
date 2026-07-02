@@ -123,34 +123,92 @@ export default function RequestManagerScreen() {
                         />
                     </View>
 
-                    {useDeadline && (
-                        <TouchableOpacity 
-                            onPress={() => setShowPicker(true)}
-                            style={{ marginBottom: 16, padding: 12, borderRadius: 8, backgroundColor: COLORS.lightBackground, borderWidth: 1, borderColor: '#E2E8F0' }}
-                        >
-                            <Text style={{ color: COLORS.lightText }}>Deadline: {deadline.toLocaleString()}</Text>
-                        </TouchableOpacity>
+                    {/* Deadline Section */}
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, paddingHorizontal: 4 }}>
+                        <Text style={{ color: COLORS.lightText, fontWeight: 'bold' }}>Set Deadline?</Text>
+                        <Switch 
+                            value={useDeadline} 
+                            onValueChange={setUseDeadline} 
+                            trackColor={{ false: '#767577', true: COLORS.indigo }}
+                        />
+                    </View>
+
+                    {/* ANDROID UI: Two clean buttons to trigger the Modal */}
+                    {useDeadline && Platform.OS === 'android' && (
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+                            <TouchableOpacity 
+                                onPress={() => { setPickerMode('date'); setShowPicker(true); }}
+                                style={{ flex: 1, marginRight: 5, padding: 12, borderRadius: 8, backgroundColor: COLORS.lightBackground, borderWidth: 1, borderColor: '#E2E8F0', alignItems: 'center' }}
+                            >
+                                <Text style={{ color: COLORS.lightText }}>{deadline.toLocaleDateString()}</Text>
+                            </TouchableOpacity>
+                            
+                            <TouchableOpacity 
+                                onPress={() => { setPickerMode('time'); setShowPicker(true); }}
+                                style={{ flex: 1, marginLeft: 5, padding: 12, borderRadius: 8, backgroundColor: COLORS.lightBackground, borderWidth: 1, borderColor: '#E2E8F0', alignItems: 'center' }}
+                            >
+                                <Text style={{ color: COLORS.lightText }}>{deadline.toLocaleTimeString()}</Text>
+                            </TouchableOpacity>
+                        </View>
                     )}
 
-                    {showPicker && (
+                    {/* IOS UI: Native inline compact picker (No state toggling needed) */}
+                    {useDeadline && Platform.OS === 'ios' && (
+                        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16, padding: 12, borderRadius: 8, backgroundColor: COLORS.lightBackground, borderWidth: 1, borderColor: '#E2E8F0' }}>
+                            <Text style={{ color: COLORS.lightText, marginRight: 10, flex: 1 }}>Deadline:</Text>
+                            <DateTimePicker
+                                value={deadline}
+                                mode="datetime"
+                                display="default"
+                                minimumDate={new Date()}
+                                onChange={(event, selectedDate) => {
+                                    if (selectedDate) setDeadline(selectedDate);
+                                }}
+                            />
+                        </View>
+                    )}
+
+                    {/* ANDROID MODAL RENDERER */}
+                    {showPicker && Platform.OS === 'android' && (
                         <DateTimePicker
                             value={deadline}
                             mode={pickerMode}
                             display="default"
                             minimumDate={new Date()}
                             onChange={(event, selectedDate) => {
-                                setShowPicker(false);
-                                if (selectedDate) {
+                                setShowPicker(false); // Instantly hide modal on Android
+                                if (event.type === 'set' && selectedDate) {
                                     setDeadline(selectedDate);
-                                    if (pickerMode === 'date') {
-                                        setPickerMode('time');
-                                        setTimeout(() => setShowPicker(true), 100);
-                                    } else {
-                                        setPickerMode('date');
-                                    }
                                 }
                             }}
                         />
+                    )}
+                    {/* WEB UI: Native HTML5 Datetime Picker */}
+                    {useDeadline && Platform.OS === 'web' && (
+                        <View style={{ marginBottom: 16 }}>
+                            <input
+                                type="datetime-local"
+                                // HTML inputs expect local time format, so we offset the UTC string
+                                value={new Date(deadline.getTime() - (deadline.getTimezoneOffset() * 60000)).toISOString().slice(0, 16)}
+                                onChange={(e) => {
+                                    if (e.target.value) {
+                                        setDeadline(new Date(e.target.value));
+                                    }
+                                }}
+                                style={{
+                                    padding: '12px',
+                                    borderRadius: '8px',
+                                    border: '1px solid #E2E8F0',
+                                    backgroundColor: COLORS.lightBackground,
+                                    color: COLORS.lightText,
+                                    fontSize: '15px',
+                                    width: '100%',
+                                    fontFamily: 'inherit',
+                                    outline: 'none',
+                                    boxSizing: 'border-box'
+                                }}
+                            />
+                        </View>
                     )}
                     <Pressable 
                         style={({ pressed }) => [
