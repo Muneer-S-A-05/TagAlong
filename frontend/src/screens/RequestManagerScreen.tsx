@@ -76,7 +76,7 @@ export default function RequestManagerScreen() {
             const token = await AsyncStorage.getItem('access_token');
             await axios.post(`${API_URL}/requests/`, {
                 destination: dest,
-                item_or_service: item,
+                title: item,          // <-- CHANGED THIS LINE
                 description: desc || '',
                 latitude: lat,
                 longitude: lng,
