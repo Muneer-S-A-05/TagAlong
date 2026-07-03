@@ -28,11 +28,11 @@ export default function RegisterScreen({ navigation }: any) {
         }
 
         try {
-            const res = await axios.post(`${API_URL}/register/`, { 
-                email: email.trim(), 
-                password, 
-                full_name: fullName.trim(), 
-                phone_number: phoneNumber.trim() 
+            const res = await axios.post(`${API_URL}/register/`, {
+                email: email.trim(),
+                password,
+                full_name: fullName.trim(),
+                phone_number: phoneNumber.trim()
             });
             if (res.status === 201) {
                 setSuccess('Registration successful! You can now login.');
@@ -69,7 +69,7 @@ export default function RegisterScreen({ navigation }: any) {
                     />
                     <TextInput
                         style={styles.inputLight}
-                        placeholder="Phone Number (starting with 9)"
+                        placeholder="Phone Number (must be 10 digits)"
                         placeholderTextColor="#94a3b8"
                         value={phoneNumber}
                         onChangeText={setPhoneNumber}
